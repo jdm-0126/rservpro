@@ -1,6 +1,6 @@
 # RservPro
 
-This is an Expo app renamed from `suotph` to `RservPro` and prepared for Vercel deployment.
+This is an Expo app `RservPro` and prepared for Vercel deployment.
 
 ## Get started
 
