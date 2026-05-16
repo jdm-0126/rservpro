@@ -16,6 +16,7 @@
       }
     },
     "android": {
+      "package": "com.jdm.rservpro",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -42,9 +43,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {
-        "origin": false
-      },
+      "router": {},
       "eas": {
         "projectId": "0b96e481-2e44-4414-a7ec-450d0fc3b8e4"
       }
