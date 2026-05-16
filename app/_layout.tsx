@@ -1,4 +1,5 @@
 import { AuthProvider } from '@/context/AuthContext';
+import { BookingProvider } from '@/context/BookingContext';
 import { VillaProvider } from '@/context/VillaContext';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -22,18 +23,20 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <VillaProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="login" options={{ headerShown: false }} />
-          <Stack.Screen name="screens/AuthScreen" options={{ headerShown: false }} />
-          <Stack.Screen name="screens/WelcomeScreen" options={{ headerShown: false }} />
-          <Stack.Screen name="villa/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="booking/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="admin" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
+        <BookingProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="login" options={{ headerShown: false }} />
+            <Stack.Screen name="screens/AuthScreen" options={{ headerShown: false }} />
+            <Stack.Screen name="screens/WelcomeScreen" options={{ headerShown: false }} />
+            <Stack.Screen name="villa/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="booking/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="admin" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </BookingProvider>
       </VillaProvider>
     </AuthProvider>
   );

@@ -36,7 +36,7 @@ export default function VillaDetail() {
             {[
               { icon: 'people-outline', val: villa.guests, label: 'Guests' },
               { icon: 'bed-outline', val: villa.bedrooms, label: 'Bedrooms' },
-              { icon: 'cash-outline', val: `$${villa.price}`, label: 'Per Night' },
+              { icon: 'cash-outline', val: `₱${villa.price.toLocaleString()}`, label: 'Per Night' },
             ].map((s) => (
               <View key={s.label} style={styles.stat}>
                 <Ionicons name={s.icon as any} size={20} color="#2E7D32" />
@@ -59,7 +59,7 @@ export default function VillaDetail() {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Text style={styles.footerPrice}>${villa.price}<Text style={styles.perNight}>/night</Text></Text>
+        <Text style={styles.footerPrice}>₱{villa.price.toLocaleString()}<Text style={styles.perNight}>/night</Text></Text>
         <TouchableOpacity style={styles.bookBtn} onPress={handleBook}>
           <Text style={styles.bookBtnText}>{user ? 'Book Now' : 'Sign In to Book'}</Text>
         </TouchableOpacity>

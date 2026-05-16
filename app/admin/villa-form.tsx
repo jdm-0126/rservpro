@@ -68,7 +68,7 @@ export default function VillaForm() {
           ))}
           <Text style={styles.section}>Details</Text>
           <View style={styles.row}>
-            {[{ label: 'Price / Night ($)', key: 'price', placeholder: '350' }, { label: 'Max Guests', key: 'guests', placeholder: '8' }, { label: 'Bedrooms', key: 'bedrooms', placeholder: '4' }].map((f) => (
+            {[{ label: 'Price / Night (₱)', key: 'price', placeholder: '5000' }, { label: 'Max Guests', key: 'guests', placeholder: '8' }, { label: 'Bedrooms', key: 'bedrooms', placeholder: '4' }].map((f) => (
               <View key={f.key} style={[styles.field, styles.fieldThird]}>
                 <Text style={styles.label}>{f.label}</Text>
                 <TextInput style={[styles.input, errors[f.key] && styles.inputError]} placeholder={f.placeholder} placeholderTextColor="#9ca3af" keyboardType="numeric" value={(form as any)[f.key]} onChangeText={(v) => set(f.key, v)} />

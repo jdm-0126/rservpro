@@ -22,7 +22,7 @@ function VillaCard({ villa, onPress }: { villa: Villa; onPress: () => void }) {
           <Ionicons name="bed-outline" size={14} color="#666" style={{ marginLeft: 12 }} />
           <Text style={styles.meta}>{villa.bedrooms} bedrooms</Text>
         </View>
-        <Text style={styles.price}>${villa.price}<Text style={styles.perNight}>/night</Text></Text>
+        <Text style={styles.price}>₱{villa.price.toLocaleString()}<Text style={styles.perNight}>/night</Text></Text>
       </View>
     </TouchableOpacity>
   );

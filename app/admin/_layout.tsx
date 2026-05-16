@@ -9,6 +9,7 @@ export default function AdminLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="villa-form" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="availability" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }

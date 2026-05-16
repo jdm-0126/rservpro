@@ -31,7 +31,7 @@ export default function AdminDashboard() {
       <View style={styles.statsRow}>
         {[
           { label: 'Total Villas', value: villas.length, icon: 'home-outline', color: '#6366f1' },
-          { label: 'Avg. Price', value: `$${villas.length ? Math.round(villas.reduce((s, v) => s + v.price, 0) / villas.length) : 0}`, icon: 'cash-outline', color: '#2E7D32' },
+          { label: 'Avg. Price', value: `₱${villas.length ? Math.round(villas.reduce((s, v) => s + v.price, 0) / villas.length).toLocaleString() : 0}`, icon: 'cash-outline', color: '#2E7D32' },
           { label: 'Total Capacity', value: villas.reduce((s, v) => s + v.guests, 0), icon: 'people-outline', color: '#f59e0b' },
         ].map((s) => (
           <View key={s.label} style={styles.statCard}>
@@ -66,9 +66,12 @@ export default function AdminDashboard() {
                 <Ionicons name="bed-outline" size={13} color="#9ca3af" style={{ marginLeft: 8 }} />
                 <Text style={styles.cardMeta}>{item.bedrooms} beds</Text>
               </View>
-              <Text style={styles.cardPrice}>${item.price}<Text style={styles.perNight}>/night</Text></Text>
+              <Text style={styles.cardPrice}>₱{item.price.toLocaleString()}<Text style={styles.perNight}>/night</Text></Text>
             </View>
             <View style={styles.actions}>
+              <TouchableOpacity style={styles.availBtn} onPress={() => router.push({ pathname: '/admin/availability', params: { id: item.id } })}>
+                <Ionicons name="calendar-outline" size={18} color="#2E7D32" />
+              </TouchableOpacity>
               <TouchableOpacity style={styles.editBtn} onPress={() => router.push({ pathname: '/admin/villa-form', params: { id: item.id } })}>
                 <Ionicons name="pencil-outline" size={18} color="#6366f1" />
               </TouchableOpacity>
@@ -107,5 +110,6 @@ const styles = StyleSheet.create({
   perNight: { fontSize: 12, fontWeight: '400', color: '#9ca3af' },
   actions: { justifyContent: 'center', gap: 8, paddingRight: 12 },
   editBtn: { width: 36, height: 36, borderRadius: 10, backgroundColor: '#eef2ff', alignItems: 'center', justifyContent: 'center' },
+  availBtn: { width: 36, height: 36, borderRadius: 10, backgroundColor: '#f0fdf4', alignItems: 'center', justifyContent: 'center' },
   deleteBtn: { width: 36, height: 36, borderRadius: 10, backgroundColor: '#fef2f2', alignItems: 'center', justifyContent: 'center' },
 });
