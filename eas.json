@@ -5,18 +5,35 @@
   },
   "build": {
     "development": {
-      "extends": "production",
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "image": "ubuntu-22.04-jdk-17-ndk-r27",
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "image": "macos-sequoia-15.2-xcode-16.2",
+        "simulator": true
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "image": "ubuntu-22.04-jdk-17-ndk-r27",
+        "buildType": "apk"
+      },
+      "ios": {
+        "image": "macos-sequoia-15.2-xcode-16.2"
+      }
     },
     "production": {
-      "distribution": "store",
       "autoIncrement": true,
+      "android": {
+        "image": "ubuntu-22.04-jdk-17-ndk-r27",
+        "buildType": "app-bundle"
+      },
       "ios": {
-        "image": "macos-sequoia-15.6-xcode-26.2"
+        "image": "macos-sequoia-15.2-xcode-16.2"
       }
     }
   },
