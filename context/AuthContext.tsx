@@ -7,8 +7,11 @@ WebBrowser.maybeCompleteAuthSession();
 
 type User = { id: string; name: string; email: string; photo: string };
 
-// Add your admin email(s) here
-const ADMIN_EMAILS = ['<YOUR_ADMIN_EMAIL@gmail.com>'];
+// Reads from EXPO_PUBLIC_ADMIN_EMAIL in .env
+const ADMIN_EMAILS = (process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '')
+  .split(',')
+  .map((e) => e.trim())
+  .filter(Boolean);
 
 type AuthContextType = {
   user: User | null;
@@ -26,9 +29,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isAdmin = !!user && ADMIN_EMAILS.includes(user.email);
 
   const [, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: '<YOUR_ANDROID_CLIENT_ID>',
-    iosClientId: '<YOUR_IOS_CLIENT_ID>',
-    webClientId: '<YOUR_WEB_CLIENT_ID>',
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    iosClientId:     process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    webClientId:     process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
   });
 
   useEffect(() => {
@@ -49,7 +52,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-    const userData: User = { id: data.id, name: data.name, email: data.email, photo: data.picture };
+    const userData: User = {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      photo: data.picture,
+    };
     setUser(userData);
     await AsyncStorage.setItem('villa_user', JSON.stringify(userData));
   };

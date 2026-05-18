@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar, DateData } from 'react-native-calendars';
+import BookingConfirmationModal from '@/components/BookingConfirmationModal';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Role = 'bot' | 'user';
@@ -88,6 +89,7 @@ function InlineBookingForm({ villaId, onClose }: { villaId: string; onClose: () 
   const [checkIn, setCheckIn] = useState<string | null>(null);
   const [checkOut, setCheckOut] = useState<string | null>(null);
   const [guests, setGuests] = useState(2);
+  const [confirmedBooking, setConfirmedBooking] = useState<import('@/context/BookingContext').Booking | null>(null);
 
   const bookedDates  = useMemo(() => new Set(getBookedDatesForVilla(villaId)), [villaId, getBookedDatesForVilla]);
   const blockedDates = useMemo(() => new Set(getBlockedDatesForVilla(villaId)), [villaId, getBlockedDatesForVilla]);
@@ -150,17 +152,37 @@ function InlineBookingForm({ villaId, onClose }: { villaId: string; onClose: () 
       Alert.alert('Unavailable', 'Some dates are no longer available. Please choose different dates.');
       return;
     }
-    await addBooking({ villaId: villa.id, villaName: villa.name, userId: user.id, userName: user.name, checkIn, checkOut, guests, totalPrice: total, status: 'confirmed' });
-    Alert.alert('Booking Confirmed! 🎉', `Your stay at ${villa.name} is confirmed.`, [
-      { text: 'View Bookings', onPress: () => { onClose(); router.replace('/(tabs)/bookings'); } },
-      { text: 'OK', onPress: onClose },
-    ]);
+    const booking = await addBooking({ villaId: villa.id, villaName: villa.name, userId: user.id, userName: user.name, userEmail: user.email, checkIn, checkOut, guests, totalPrice: total, status: 'confirmed' });
+    setConfirmedBooking(booking);
   };
 
   if (!villa) return null;
+
+  // Auth gate — show sign-in prompt instead of calendar
+  if (!user) {
+    return (
+      <View style={bStyles.container}>
+        <View style={bStyles.villaHeader}>
+          <Text style={bStyles.villaName}>{villa.name}</Text>
+          <Text style={bStyles.villaPrice}>₱{villa.price.toLocaleString()}/night</Text>
+        </View>
+        <View style={bStyles.authGate}>
+          <Ionicons name="lock-closed-outline" size={36} color="#1a1a2e" />
+          <Text style={bStyles.authTitle}>Sign in to Book</Text>
+          <Text style={bStyles.authSubtitle}>You need to be signed in to make a reservation.</Text>
+          <TouchableOpacity style={bStyles.authBtn} onPress={() => { onClose(); router.push('/login'); }}>
+            <Ionicons name="logo-google" size={16} color="#fff" />
+            <Text style={bStyles.authBtnText}>Sign in with Google</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   const today = new Date().toISOString().split('T')[0];
 
   return (
+    <>
     <View style={bStyles.container}>
       {/* Villa header */}
       <View style={bStyles.villaHeader}>
@@ -251,6 +273,13 @@ function InlineBookingForm({ villaId, onClose }: { villaId: string; onClose: () 
         </Text>
       </TouchableOpacity>
     </View>
+    <BookingConfirmationModal
+      booking={confirmedBooking}
+      visible={!!confirmedBooking}
+      onViewBookings={() => { setConfirmedBooking(null); onClose(); router.replace('/(tabs)/bookings'); }}
+      onClose={() => { setConfirmedBooking(null); onClose(); }}
+    />
+    </>
   );
 }
 
@@ -453,4 +482,10 @@ const bStyles = StyleSheet.create({
   confirmBtn:     { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#1a1a2e', padding: 14, margin: 10, borderRadius: 12 },
   confirmBtnDisabled: { backgroundColor: '#ccc' },
   confirmText:    { color: '#fff', fontWeight: '700', fontSize: 14 },
+  // Auth gate inside chat
+  authGate:       { padding: 24, alignItems: 'center', gap: 12, backgroundColor: '#fff' },
+  authTitle:      { fontSize: 16, fontWeight: '700', color: '#1a1a2e' },
+  authSubtitle:   { fontSize: 13, color: '#888', textAlign: 'center' },
+  authBtn:        { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: '#1a1a2e', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 12, marginTop: 4 },
+  authBtnText:    { color: '#fff', fontWeight: '700', fontSize: 13 },
 });

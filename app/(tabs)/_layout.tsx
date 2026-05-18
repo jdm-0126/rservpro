@@ -1,11 +1,13 @@
 import { useAuth } from '@/context/AuthContext';
+import { useBookings } from '@/context/BookingContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import ChatAssistant from '@/components/ChatAssistant';
 
 export default function TabLayout() {
   const { isAdmin } = useAuth();
+  const { unreadCount } = useBookings();
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,7 +37,19 @@ export default function TabLayout() {
           name="admin"
           options={
             isAdmin
-              ? { title: 'Admin', tabBarIcon: ({ color, size }) => <Ionicons name="shield-outline" size={size} color={color} /> }
+              ? {
+                  title: 'Admin',
+                  tabBarIcon: ({ color, size }) => (
+                    <View>
+                      <Ionicons name="shield-outline" size={size} color={color} />
+                      {unreadCount > 0 && (
+                        <View style={{ position: 'absolute', top: -4, right: -6, backgroundColor: '#ef4444', borderRadius: 8, minWidth: 16, height: 16, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 }}>
+                          <Text style={{ color: '#fff', fontSize: 10, fontWeight: '700' }}>{unreadCount}</Text>
+                        </View>
+                      )}
+                    </View>
+                  ),
+                }
               : { href: null }
           }
         />
