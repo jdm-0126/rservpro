@@ -5,7 +5,7 @@
   "scripts": {
     "start": "expo start",
     "build": "npx expo export -p web",
-    "vercel-build": "node scripts/generate-pwa-icons.js && npx expo export -p web",
+    "vercel-build": "node scripts/generate-pwa-icons.js && npx expo export -p web && node -e \"const fs=require('fs');['eas.json','create-production-builds.yml'].forEach(f=>{try{fs.unlinkSync('dist/'+f)}catch(e){}})\"",
     "generate-icons": "node scripts/generate-pwa-icons.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
