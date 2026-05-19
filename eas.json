@@ -28,12 +28,17 @@
     },
     "production": {
       "autoIncrement": true,
+      "env": {
+        "NODE_ENV": "production"
+      },
       "android": {
         "image": "ubuntu-22.04-jdk-17-ndk-r27",
         "buildType": "app-bundle"
       },
       "ios": {
-        "image": "macos-sequoia-15.2-xcode-16.2"
+        "image": "macos-sequoia-15.2-xcode-16.2",
+        "resourceClass": "m-medium",
+        "buildConfiguration": "Release"
       }
     }
   },
